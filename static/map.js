@@ -3,6 +3,14 @@
 (function () {
     "use strict";
 
+    // Sidebar toggle.
+    var sidebar = document.getElementById("sidebar");
+    var toggle = document.getElementById("sidebar-toggle");
+    toggle.addEventListener("click", function () {
+        sidebar.classList.toggle("collapsed");
+        setTimeout(function () { map.invalidateSize(); }, 250);
+    });
+
     const map = L.map("map", { zoomControl: true }).setView([52.2, 0.12], 12);
 
     // Tile layer.

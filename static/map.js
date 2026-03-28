@@ -37,7 +37,7 @@
         });
 
         // Tooltip.
-        let tip = "<div class='grid-tooltip'><strong>" + n + "/4 quadrants</strong>";
+        let tip = "<div class='grid-tooltip'><strong>" + sq.gridref + "</strong> — " + n + "/4 quadrants";
         if (sq.walks.length > 0) {
             tip += "<div class='walks-list'>" + sq.walks.join(", ") + "</div>";
         }

@@ -11,7 +11,7 @@ from jinja2 import Environment, FileSystemLoader
 from .ascii_grid import render_ascii
 from .combine import combine
 from .config import load_config
-from .coords import osgb_to_latlon
+from .coords import osgb_to_gridref, osgb_to_latlon
 from .parse_gpx import parse_gpx
 
 PROJECT_ROOT = Path.cwd()
@@ -62,10 +62,12 @@ def build(config_path: Path | None = None) -> None:
             ne_lat, ne_lon = osgb_to_latlon(e1, n1)
             nw_lat, nw_lon = osgb_to_latlon(e0, n1)
             state = combined.grid.get((gx, gy))
+            gridref = osgb_to_gridref(e0, n0)
             grid_squares.append(
                 {
                     "gx": gx,
                     "gy": gy,
+                    "gridref": gridref,
                     "corners": [
                         [sw_lat, sw_lon],
                         [se_lat, se_lon],

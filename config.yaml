@@ -1,0 +1,13 @@
+grid:
+  origin_easting: 537000
+  origin_northing: 248000
+  squares_x: 20
+  squares_y: 20
+  square_size: 1000
+
+visit:
+  quadrant_threshold: 100
+
+tile:
+  provider: openstreetmap
+  os_api_key: ""

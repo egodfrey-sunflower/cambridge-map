@@ -5,10 +5,10 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
 
 import gpxpy
 
+from .config import Config
 from .coords import latlon_to_osgb
 
 
@@ -23,16 +23,16 @@ class WalkResult:
     ]  # (gx, gy) -> set of quadrant indices 0-3
 
 
-def parse_gpx(gpx_path: Path, config: dict[str, Any]) -> WalkResult:
+def parse_gpx(gpx_path: Path, config: Config) -> WalkResult:
     """Parse a GPX file and return per-walk coverage data."""
-    grid = config["grid"]
-    origin_e = grid["origin_easting"]
-    origin_n = grid["origin_northing"]
-    sq_size = grid["square_size"]
+    grid = config.grid
+    origin_e = grid.origin_easting
+    origin_n = grid.origin_northing
+    sq_size = grid.square_size
     half = sq_size / 2
-    squares_x = grid["squares_x"]
-    squares_y = grid["squares_y"]
-    threshold = config["visit"]["min_cumulative_distance_in_quadrant_per_walk"]
+    squares_x = grid.squares_x
+    squares_y = grid.squares_y
+    threshold = config.visit.min_cumulative_distance_in_quadrant_per_walk
 
     with open(gpx_path) as f:
         gpx = gpxpy.parse(f)
@@ -63,7 +63,7 @@ def parse_gpx(gpx_path: Path, config: dict[str, Any]) -> WalkResult:
                 latlon_points.append((pt.latitude, pt.longitude))
                 osgb_points.append(latlon_to_osgb(pt.latitude, pt.longitude))
 
-    min_square_dist = config["visit"]["min_contiguous_distance_in_square_per_walk"]
+    min_square_dist = config.visit.min_contiguous_distance_in_square_per_walk
     total_distance = 0.0
 
     def _grid_square(e: float, n: float) -> tuple[int, int] | None:

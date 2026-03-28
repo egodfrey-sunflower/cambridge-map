@@ -12,7 +12,3 @@ visit:
   # Within a qualifying walk, a quadrant is "visited" if the walk's cumulative
   # (not necessarily contiguous) distance in that quadrant meets this threshold.
   min_cumulative_distance_in_quadrant_per_walk: 100
-
-tile:
-  provider: openstreetmap
-  os_api_key: ""

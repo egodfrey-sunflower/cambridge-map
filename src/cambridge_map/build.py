@@ -5,30 +5,23 @@ from __future__ import annotations
 import json
 import shutil
 from pathlib import Path
-from typing import Any
 
-import yaml
 from jinja2 import Environment, FileSystemLoader
 
 from .ascii_grid import render_ascii
 from .combine import combine
+from .config import load_config
 from .coords import osgb_to_latlon
 from .parse_gpx import parse_gpx
 
 PROJECT_ROOT = Path.cwd()
 
 
-def load_config(config_path: Path | None = None) -> dict[str, Any]:
+def build(config_path: Path | None = None) -> None:
     if config_path is None:
         config_path = PROJECT_ROOT / "config.yaml"
-    with open(config_path) as f:
-        result: dict[str, Any] = yaml.safe_load(f)
-        return result
-
-
-def build(config_path: Path | None = None) -> None:
     config = load_config(config_path)
-    grid_cfg = config["grid"]
+    grid = config.grid
 
     # Phase 1: parse all GPX files.
     gpx_dir = PROJECT_ROOT / "gpx"
@@ -44,15 +37,15 @@ def build(config_path: Path | None = None) -> None:
 
     # ASCII output for quick check.
     print()
-    print(render_ascii(combined, grid_cfg["squares_x"], grid_cfg["squares_y"]))
+    print(render_ascii(combined, grid.squares_x, grid.squares_y))
     print()
 
     # Build JSON data for the frontend.
-    origin_e = grid_cfg["origin_easting"]
-    origin_n = grid_cfg["origin_northing"]
-    sq_size = grid_cfg["square_size"]
-    squares_x = grid_cfg["squares_x"]
-    squares_y = grid_cfg["squares_y"]
+    origin_e = grid.origin_easting
+    origin_n = grid.origin_northing
+    sq_size = grid.square_size
+    squares_x = grid.squares_x
+    squares_y = grid.squares_y
 
     # Grid squares with lat/lon corners.
     grid_squares = []
@@ -111,8 +104,6 @@ def build(config_path: Path | None = None) -> None:
             "ne_lon": ne_lon,
         },
         "walks": walks_json,
-        "tile_provider": config["tile"]["provider"],
-        "os_api_key": config["tile"].get("os_api_key", ""),
     }
 
     data_json = json.dumps(data)

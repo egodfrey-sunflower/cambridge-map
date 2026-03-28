@@ -17,17 +17,10 @@
     const map = L.map("map", { zoomControl: true }).setView([52.2, 0.12], 12);
 
     // Tile layer.
-    if (DATA.tile_provider === "os" && DATA.os_api_key) {
-        L.tileLayer(
-            "https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png?key=" + DATA.os_api_key,
-            { maxZoom: 18, attribution: "© Crown copyright and database rights OS" }
-        ).addTo(map);
-    } else {
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-            maxZoom: 19,
-            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        }).addTo(map);
-    }
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(map);
 
     // Grid overlay.
     const gridLayer = L.layerGroup().addTo(map);
@@ -65,7 +58,6 @@
 
     // Walk routes.
     const walkPolylines = {};
-    const walkColors = {};
     const defaultColor = "#4263eb";
     const highlightColor = "#f03e3e";
 

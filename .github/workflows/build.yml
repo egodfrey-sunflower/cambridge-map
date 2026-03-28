@@ -32,7 +32,7 @@ jobs:
         run: uv sync
 
       - name: Build site
-        run: uv run python -m cambridge_map.build
+        run: uv run python -m cambridge_map
 
       - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v3

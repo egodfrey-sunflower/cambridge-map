@@ -14,7 +14,7 @@ from .combine import combine
 from .coords import osgb_to_latlon
 from .parse_gpx import parse_gpx
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+PROJECT_ROOT = Path.cwd()
 
 
 def load_config(config_path: Path | None = None) -> dict:

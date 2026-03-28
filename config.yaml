@@ -9,6 +9,6 @@ visit:
   # A walk must have a single contiguous stretch of at least this many metres
   # within a square for that walk to count toward the square at all.
   min_contiguous_distance_in_square_per_walk: 200
-  # Within a qualifying walk, a quadrant is "visited" if the walk's cumulative
-  # (not necessarily contiguous) distance in that quadrant meets this threshold.
-  min_cumulative_distance_in_quadrant_per_walk: 100
+  # Within a qualifying stretch, a quadrant is "visited" if the contiguous
+  # distance in that quadrant meets this threshold.
+  min_contiguous_distance_in_quadrant_per_walk: 100

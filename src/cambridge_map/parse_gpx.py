@@ -32,7 +32,7 @@ def parse_gpx(gpx_path: Path, config: Config) -> WalkResult:
     half = sq_size / 2
     squares_x = grid.squares_x
     squares_y = grid.squares_y
-    threshold = config.visit.min_cumulative_distance_in_quadrant_per_walk
+    threshold = config.visit.min_contiguous_distance_in_quadrant_per_walk
 
     with open(gpx_path) as f:
         gpx = gpxpy.parse(f)
@@ -85,8 +85,8 @@ def parse_gpx(gpx_path: Path, config: Config) -> WalkResult:
     # We accumulate distance and quadrant distances per stretch, then only
     # commit them if the stretch distance meets min_square_dist.
 
-    # Committed quadrant distances (only from qualifying stretches).
-    quadrant_dist: dict[tuple[int, int, int], float] = {}
+    # Quadrants that met the contiguous distance threshold within a stretch.
+    quadrant_coverage: dict[tuple[int, int], set[int]] = {}
 
     # Current stretch state.
     stretch_dist = 0.0
@@ -95,8 +95,9 @@ def parse_gpx(gpx_path: Path, config: Config) -> WalkResult:
     def _commit_stretch() -> None:
         """Commit the current stretch if it meets the minimum distance."""
         if stretch_dist >= min_square_dist:
-            for key, d in stretch_quad_dist.items():
-                quadrant_dist[key] = quadrant_dist.get(key, 0.0) + d
+            for (gx, gy, q), d in stretch_quad_dist.items():
+                if d >= threshold:
+                    quadrant_coverage.setdefault((gx, gy), set()).add(q)
 
     for i, (e, n) in enumerate(osgb_points):
         sq = _grid_square(e, n)
@@ -155,15 +156,6 @@ def parse_gpx(gpx_path: Path, config: Config) -> WalkResult:
 
     # Commit final stretch.
     _commit_stretch()
-
-    # Apply quadrant threshold.
-    quadrant_coverage: dict[tuple[int, int], set[int]] = {}
-    for (gx, gy, q), d in quadrant_dist.items():
-        if d >= threshold:
-            sq = (gx, gy)
-            if sq not in quadrant_coverage:
-                quadrant_coverage[sq] = set()
-            quadrant_coverage[sq].add(q)
 
     return WalkResult(
         name=name,

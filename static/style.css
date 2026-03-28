@@ -124,10 +124,9 @@ body {
 }
 
 @media (max-width: 600px) {
-    #sidebar {
-        margin-left: -320px;
-    }
     #sidebar-toggle {
-        left: 0;
+        width: 36px;
+        height: 64px;
+        font-size: 20px;
     }
 }

@@ -6,6 +6,9 @@
     // Sidebar toggle.
     var sidebar = document.getElementById("sidebar");
     var toggle = document.getElementById("sidebar-toggle");
+    if (window.innerWidth <= 600) {
+        sidebar.classList.add("collapsed");
+    }
     toggle.addEventListener("click", function () {
         sidebar.classList.toggle("collapsed");
         setTimeout(function () { map.invalidateSize(); }, 250);

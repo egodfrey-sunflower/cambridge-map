@@ -23,5 +23,7 @@ def render_ascii(result: CombinedResult, squares_x: int, squares_y: int) -> str:
         lines.append(" ".join(row))
 
     total = squares_x * squares_y
-    lines.append(f"\n{visited_count}/{total} squares visited, {len(result.walks)} walks")
+    lines.append(
+        f"\n{visited_count}/{total} squares visited, {len(result.walks)} walks"
+    )
     return "\n".join(lines)

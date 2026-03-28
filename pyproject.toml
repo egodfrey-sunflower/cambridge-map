@@ -13,5 +13,33 @@ dependencies = [
     "jinja2>=3.1",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "black>=24.0",
+    "ruff>=0.4",
+    "mypy>=1.10",
+    "types-pyyaml>=6.0",
+]
+
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.black]
+target-version = ["py312"]
+
+[tool.ruff]
+src = ["src"]
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+mypy_path = "src"
+packages = ["cambridge_map"]
+
+[[tool.mypy.overrides]]
+module = ["gpxpy", "gpxpy.*"]
+ignore_missing_imports = true

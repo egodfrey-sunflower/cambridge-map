@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import shutil
 from pathlib import Path
+from typing import Any
 
 import yaml
 from jinja2 import Environment, FileSystemLoader
@@ -17,11 +18,12 @@ from .parse_gpx import parse_gpx
 PROJECT_ROOT = Path.cwd()
 
 
-def load_config(config_path: Path | None = None) -> dict:
+def load_config(config_path: Path | None = None) -> dict[str, Any]:
     if config_path is None:
         config_path = PROJECT_ROOT / "config.yaml"
     with open(config_path) as f:
-        return yaml.safe_load(f)
+        result: dict[str, Any] = yaml.safe_load(f)
+        return result
 
 
 def build(config_path: Path | None = None) -> None:

@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 import gpxpy
 
@@ -17,10 +18,12 @@ class WalkResult:
     date: str | None
     total_distance: float  # metres
     track_points: list[tuple[float, float]]  # (lat, lon) for map display
-    quadrant_coverage: dict[tuple[int, int], set[int]]  # (gx, gy) -> set of quadrant indices 0-3
+    quadrant_coverage: dict[
+        tuple[int, int], set[int]
+    ]  # (gx, gy) -> set of quadrant indices 0-3
 
 
-def parse_gpx(gpx_path: Path, config: dict) -> WalkResult:
+def parse_gpx(gpx_path: Path, config: dict[str, Any]) -> WalkResult:
     """Parse a GPX file and return per-walk coverage data."""
     grid = config["grid"]
     origin_e = grid["origin_easting"]
@@ -66,7 +69,7 @@ def parse_gpx(gpx_path: Path, config: dict) -> WalkResult:
     total_distance = 0.0
 
     def _grid_quadrant(e: float, n: float) -> tuple[int, int, int] | None:
-        """Return (grid_x, grid_y, quadrant) for an OSGB point, or None if outside grid."""
+        """Return (grid_x, grid_y, quadrant) or None if outside grid."""
         gx = int((e - origin_e) / sq_size)
         gy = int((n - origin_n) / sq_size)
         if not (0 <= gx < squares_x and 0 <= gy < squares_y):
@@ -105,10 +108,10 @@ def parse_gpx(gpx_path: Path, config: dict) -> WalkResult:
     quadrant_coverage: dict[tuple[int, int], set[int]] = {}
     for (gx, gy, q), d in quadrant_dist.items():
         if d >= threshold:
-            key = (gx, gy)
-            if key not in quadrant_coverage:
-                quadrant_coverage[key] = set()
-            quadrant_coverage[key].add(q)
+            sq = (gx, gy)
+            if sq not in quadrant_coverage:
+                quadrant_coverage[sq] = set()
+            quadrant_coverage[sq].add(q)
 
     return WalkResult(
         name=name,

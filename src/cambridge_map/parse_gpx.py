@@ -68,8 +68,8 @@ def parse_gpx(gpx_path: Path, config: Config) -> WalkResult:
 
     def _grid_square(e: float, n: float) -> tuple[int, int] | None:
         """Return (grid_x, grid_y) or None if outside grid."""
-        gx = int((e - origin_e) / sq_size)
-        gy = int((n - origin_n) / sq_size)
+        gx = math.floor((e - origin_e) / sq_size)
+        gy = math.floor((n - origin_n) / sq_size)
         if 0 <= gx < squares_x and 0 <= gy < squares_y:
             return gx, gy
         return None
